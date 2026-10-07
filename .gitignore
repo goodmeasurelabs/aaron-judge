@@ -26,3 +26,6 @@ npm-debug.log*
 .wrangler/
 .env*
 *.private
+
+# Generated Cloudflare build output and local state.
+.worker-dry-run/
