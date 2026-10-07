@@ -20,3 +20,12 @@ dist/
 *.pem
 npm-debug.log*
 *.log
+
+# Cloudflare migration artifacts and local secrets
+.open-next/
+.wrangler/
+.env*
+*.private
+
+# Generated Cloudflare build output and local state.
+.worker-dry-run/
