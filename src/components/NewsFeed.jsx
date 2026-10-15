@@ -1,19 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { timeAgo } from "@/lib/utils";
 import { trackOutboundClick } from "@/lib/analytics";
 
 export default function NewsFeed() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState("unavailable");
 
   useEffect(() => {
     async function fetchNews() {
       try {
         const res = await fetch("/api/news");
+        if (!res.ok) throw new Error("News unavailable");
         const data = await res.json();
-        setArticles(data.articles || []);
+        setArticles(Array.isArray(data.articles) ? data.articles : []);
+        setStatus(data.status || "unavailable");
       } catch (error) {
         console.error("Failed to fetch news:", error);
       } finally {
@@ -40,7 +42,7 @@ export default function NewsFeed() {
   }
 
   if (articles.length === 0) {
-    return <p className="text-gray-400 text-center">No news articles found.</p>;
+    return <p role="status" className="text-gray-400 text-center">{status === "empty" ? "No news articles are available right now." : "News is temporarily unavailable. Please check back later."}</p>;
   }
 
   return (
@@ -75,7 +77,7 @@ export default function NewsFeed() {
               {article.source?.name}
             </span>
             <span>&middot;</span>
-            <span>{timeAgo(article.publishedAt)}</span>
+            <time dateTime={article.publishedAt}>{new Date(article.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" })}</time>
           </div>
 
           {article.description && (

@@ -4,6 +4,10 @@ import { getJudgeStats, getNextGame, getJudgeCareerStats } from "@/lib/mlb";
 import { formatDate, formatTime } from "@/lib/utils";
 import NewsFeed from "@/components/NewsFeed";
 
+export const metadata = {
+  alternates: { canonical: "https://aaronjudge.net/" },
+};
+
 export const revalidate = 300;
 
 export default async function HomePage() {
