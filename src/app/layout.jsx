@@ -30,9 +30,11 @@ export const metadata = {
     url: "https://aaronjudge.net",
     siteName: "AaronJudge.net",
     type: "website",
+    images: [{ url: "/social-card", width: 1200, height: 630, alt: "AaronJudge.net — unofficial fan site, original baseball artwork" }],
   },
   twitter: {
     card: "summary_large_image",
+    images: ["/social-card"],
     title: "Aaron Judge — Yankees Captain | AaronJudge.net",
     description:
       "Live stats, game schedule, news, and fan content for Aaron Judge.",
