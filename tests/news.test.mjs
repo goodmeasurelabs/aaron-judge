@@ -13,7 +13,7 @@ test.afterEach(() => {
   if (originalKey === undefined) delete process.env.NEWS_API_KEY;
   else process.env.NEWS_API_KEY = originalKey;
 });
-const article = { title: 'Source headline', source: { name: 'Publisher' }, url: 'https://example.com/article', publishedAt: '2022-10-05T16:00:00Z', description: 'Source description' };
+const article = { title: 'Source headline', source: { name: 'Publisher' }, url: 'https://example.com/article', publishedAt: '2022-10-05T16:00:00Z', description: 'Source description', urlToImage: null };
 function mockResponse(body, ok = true) {
   process.env.NEWS_API_KEY = 'test-only';
   globalThis.fetch = async () => ({ ok, json: async () => body });
@@ -71,4 +71,11 @@ test('homepage canonical and both social metadata fields reference original artw
   assert.equal((layout.match(/"\/social-card"/g) || []).length, 2);
   assert.match(card, /UNOFFICIAL FAN SITE/);
   assert.match(card, /width: 1200, height: 630/);
+});
+
+test('optional images retain web URLs and discard malformed or unsafe URLs', async () => {
+  const values = ['https://example.com/photo.jpg', 'http://example.com/photo.jpg', '#', '/relative', 'javascript:alert(1)', 'data:image/png;base64,AAAA', {}, [], 42, null];
+  mockResponse({ status: 'ok', articles: values.map(urlToImage => ({ ...article, urlToImage })) });
+  const data = await (await GET()).json();
+  assert.deepEqual(data.articles.map(item => item.urlToImage), [values[0], values[1], ...values.slice(2).map(() => null)]);
 });

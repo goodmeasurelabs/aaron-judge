@@ -4,16 +4,36 @@ const cacheHeaders = {
   "Cache-Control": "public, s-maxage=900, stale-while-revalidate=1800",
 };
 
-// Only display source-provided articles with usable links and publication dates.
-function isArticle(article) {
-  if (!article || typeof article.title !== "string" || !article.title.trim()) return false;
-  if (typeof article.publishedAt !== "string" || !Number.isFinite(Date.parse(article.publishedAt))) return false;
+function isWebUrl(value) {
+  if (typeof value !== "string") return false;
   try {
-    const url = new URL(article.url);
+    const url = new URL(value);
     return ["https:", "http:"].includes(url.protocol);
   } catch {
     return false;
   }
+}
+
+// Only display source-provided articles with usable links and publication dates.
+function isArticle(article) {
+  return article && typeof article.title === "string" && article.title.trim() &&
+    typeof article.publishedAt === "string" && Number.isFinite(Date.parse(article.publishedAt)) &&
+    isWebUrl(article.url);
+}
+
+function optionalText(value) {
+  return typeof value === "string" ? value : null;
+}
+
+function normalizeArticle(article) {
+  return {
+    title: article.title,
+    url: article.url,
+    publishedAt: article.publishedAt,
+    source: { name: optionalText(article.source?.name) },
+    description: optionalText(article.description),
+    urlToImage: isWebUrl(article.urlToImage) ? article.urlToImage : null,
+  };
 }
 
 export async function GET() {
@@ -31,7 +51,7 @@ export async function GET() {
     if (!res.ok) return unavailable();
     const data = await res.json();
     if (data.status !== "ok" || !Array.isArray(data.articles)) return unavailable();
-    const articles = data.articles.filter(isArticle);
+    const articles = data.articles.filter(isArticle).map(normalizeArticle);
     return NextResponse.json(
       { articles, status: articles.length ? "ok" : "empty" },
       { headers: cacheHeaders }
