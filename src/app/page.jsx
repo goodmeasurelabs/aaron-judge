@@ -3,6 +3,7 @@ import Image from "next/image";
 import { getJudgeStats, getNextGame, getJudgeCareerStats } from "@/lib/mlb";
 import { formatDate, formatTime } from "@/lib/utils";
 import NewsFeed from "@/components/NewsFeed";
+import HomeFeatureCards from "@/components/HomeFeatureCards";
 
 export const revalidate = 300;
 
@@ -74,6 +75,19 @@ export default async function HomePage() {
           </div>
         )}
       </section>
+
+      {/* ===== Feature Cards (trivia + next game) ===== */}
+      <HomeFeatureCards
+        nextGame={
+          nextGame
+            ? {
+                matchup: `${isAway ? "@ " : "vs "}${opponent}`,
+                date: formatDate(nextGame.gameDate),
+                time: formatTime(nextGame.gameDate),
+              }
+            : null
+        }
+      />
 
       {/* ===== Next Game Widget ===== */}
       <section className="bg-navy-900/50 border-b border-white/5">
