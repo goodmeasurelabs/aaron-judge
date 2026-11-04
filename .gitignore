@@ -29,3 +29,6 @@ npm-debug.log*
 
 # Generated Cloudflare build output and local state.
 .worker-dry-run/
+
+# Sanitized provider release evidence is retained by Actions.
+release-evidence/
