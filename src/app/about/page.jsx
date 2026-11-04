@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import AboutQuickLinks from "@/components/AboutQuickLinks";
 
 export const metadata = {
   title: "About Aaron Judge — The Yankees Captain",
@@ -57,6 +58,9 @@ export default function AboutPage() {
           <p className="text-xl md:text-2xl text-gray-300 font-body">
             The Captain &nbsp;|&nbsp; #99
           </p>
+
+          {/* Quick links */}
+          <AboutQuickLinks />
         </div>
       </section>
 

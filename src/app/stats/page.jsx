@@ -1,4 +1,6 @@
-import { getJudgeStats, getJudgeCareerStats } from "@/lib/mlb";
+import { getJudgeStats, getJudgeCareerStats, getNextGame, YANKEES_ID } from "@/lib/mlb";
+import { formatDate, formatTime } from "@/lib/utils";
+import NextGameStrip from "@/components/NextGameStrip";
 
 export const metadata = {
   title: "Aaron Judge Stats — Season & Career Statistics",
@@ -58,10 +60,25 @@ function StatGrid({ stats, fields }) {
 }
 
 export default async function StatsPage() {
-  const [seasonData, careerStats] = await Promise.all([
+  const [seasonData, careerStats, nextGame] = await Promise.all([
     getJudgeStats(),
     getJudgeCareerStats(),
+    getNextGame().catch(() => null),
   ]);
+
+  // Format on the server so the client strip doesn't hit a hydration mismatch
+  let nextGameInfo = null;
+  if (nextGame) {
+    const isAway = nextGame.teams.away.team.id === YANKEES_ID;
+    nextGameInfo = {
+      isAway,
+      opponent: isAway
+        ? nextGame.teams.home.team.name
+        : nextGame.teams.away.team.name,
+      date: formatDate(nextGame.gameDate),
+      time: formatTime(nextGame.gameDate),
+    };
+  }
 
   const currentYear = new Date().getFullYear();
   const season = seasonData?.season;
@@ -82,6 +99,10 @@ export default async function StatsPage() {
           </p>
         </div>
       </section>
+
+      <div className="max-w-6xl mx-auto px-4 pt-6">
+        <NextGameStrip game={nextGameInfo} />
+      </div>
 
       <div className="max-w-6xl mx-auto px-4 py-12 space-y-16">
         {/* Season Stats */}
