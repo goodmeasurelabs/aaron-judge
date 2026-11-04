@@ -31,7 +31,7 @@ jobs:
       - run: npm run lint
       - run: node --test scripts/verify-worker-release.test.mjs
       - run: npx --no-install opennextjs-cloudflare build
-      - run: npx --no-install wrangler deploy --dry-run --config wrangler.jsonc --outdir .worker-dry-run
+      - run: npx --no-install wrangler deploy --config wrangler.jsonc --keep-vars --message="GitHub commit ${{ github.sha }}" --dry-run --outdir .worker-dry-run
   deploy:
     needs: validate
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
@@ -69,7 +69,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_DEPLOY_TOKEN }}
           accountId: ee641897681cddb2b23b18fb4b639034
           wranglerVersion: '4.147.0'
-          command: deploy --keep-vars --message="GitHub commit ${{ github.sha }}"
+          command: deploy --config wrangler.jsonc --keep-vars --message="GitHub commit ${{ github.sha }}"
       - name: Verify exact source version and preserved runtime bindings
         run: node scripts/verify-worker-release.mjs --after
         env:
