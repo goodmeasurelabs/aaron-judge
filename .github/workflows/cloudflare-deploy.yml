@@ -70,7 +70,7 @@ jobs:
           accountId: ee641897681cddb2b23b18fb4b639034
           wranglerVersion: '4.147.0'
           command: deploy --keep-vars --message="GitHub commit ${{ github.sha }}"
-      - name: Verify exact source version and preserved runtime bindings/domains
+      - name: Verify exact source version and preserved runtime bindings
         run: node scripts/verify-worker-release.mjs --after
         env:
           CLOUDFLARE_DEPLOY_TOKEN: ${{ secrets.CLOUDFLARE_DEPLOY_TOKEN }}
