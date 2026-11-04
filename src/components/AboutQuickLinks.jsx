@@ -6,24 +6,24 @@ import { trackNavigationClick } from "@/lib/analytics";
 const QUICK_LINKS = [
   {
     href: "/stats",
-    title: "Live Stats",
+    title: "See this season's stats",
     description: "Season and career numbers, updated throughout the year.",
   },
   {
     href: "/schedule",
-    title: "Upcoming Schedule",
+    title: "Find the next Yankees game",
     description: "See when and where the Yankees play next.",
   },
   {
     href: "/games",
-    title: "Trivia Game",
+    title: "Play the Judge trivia game",
     description: "Test how well you really know the Captain.",
   },
 ];
 
 export default function AboutQuickLinks() {
   return (
-    <section className="max-w-5xl mx-auto px-4 pt-12">
+    <div className="mt-10 text-left">
       <div className="grid sm:grid-cols-3 gap-4">
         {QUICK_LINKS.map((item) => (
           <Link
@@ -41,6 +41,6 @@ export default function AboutQuickLinks() {
           </Link>
         ))}
       </div>
-    </section>
+    </div>
   );
 }

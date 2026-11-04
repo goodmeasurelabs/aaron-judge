@@ -58,11 +58,11 @@ export default function AboutPage() {
           <p className="text-xl md:text-2xl text-gray-300 font-body">
             The Captain &nbsp;|&nbsp; #99
           </p>
+
+          {/* Quick links */}
+          <AboutQuickLinks />
         </div>
       </section>
-
-      {/* Quick links */}
-      <AboutQuickLinks />
 
       {/* Bio */}
       <section className="max-w-5xl mx-auto px-4 py-16 space-y-10">
