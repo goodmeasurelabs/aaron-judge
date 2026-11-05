@@ -5,6 +5,10 @@ import { formatDate, formatTime } from "@/lib/utils";
 import NewsFeed from "@/components/NewsFeed";
 import HomeFeatureCards from "@/components/HomeFeatureCards";
 
+export const metadata = {
+  alternates: { canonical: "https://aaronjudge.net/" },
+};
+
 export const revalidate = 300;
 
 export default async function HomePage() {

@@ -29,6 +29,7 @@ jobs:
         run: test -n "$NEXT_PUBLIC_GA_MEASUREMENT_ID"
       - run: npm ci
       - run: npm run lint
+      - run: npm test
       - run: node --test scripts/verify-worker-release.test.mjs
       - run: npx --no-install opennextjs-cloudflare build
       - run: npx --no-install wrangler deploy --config wrangler.jsonc --keep-vars --message="GitHub commit ${{ github.sha }}" --dry-run --outdir .worker-dry-run
