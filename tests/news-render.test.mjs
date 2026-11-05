@@ -5,7 +5,8 @@ import { createRequire } from 'node:module';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 const require = createRequire(import.meta.url);
-const { transform } = require('next/dist/build/swc');
+const { loadBindings, transform } = require('next/dist/build/swc');
+await loadBindings();
 const source = (await readFile(new URL('../src/components/NewsFeed.jsx', import.meta.url), 'utf8')).replace(/^import .*;\n/gm, '');
 const { code } = await transform(source, { filename: 'NewsFeed.jsx', jsc: { parser: { syntax: 'ecmascript', jsx: true }, transform: { react: { runtime: 'classic' } } }, module: { type: 'commonjs' } });
 function render(articles, status) {
